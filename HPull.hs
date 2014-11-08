@@ -3,8 +3,9 @@
 module Main
 where
 import Control.Monad
+import Data.Maybe
 import qualified Data.ByteString as S
-import Network.HTTP.Client
+import Network.Http.Client
 import System.Environment
 import System.Exit
 import System.IO
@@ -29,10 +30,11 @@ main
            repository = tail $ dropWhile((/=)'/') dockerImage
        putStrLn $ "Pulling " ++ namespace ++ "/" ++ repository
 
-       connection  <- Network.HTTP.Client.openConnection "www.google.com" 80
+       connection <- openConnection "www.google.com" 80
 
-       q <- buildRequest connection $ do
-         http GET "/"
+       q <- buildRequest $ do
+                http GET "/"
+                setAccept "text/html"
 
        sendRequest connection q emptyBody
 
